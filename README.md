@@ -6,6 +6,9 @@ This repository contains the architecture design and feature breakdown for a com
 
 - **[System Architecture](architecture_design.md)**: Detailed system architecture, technology stack, and data flow diagrams
 - **[Features Breakdown](features_breakdown.md)**: Module dependencies, feature prioritization, and MVP roadmap
+- **[Database Schema](DATABASE_SCHEMA.md)**: Complete PostgreSQL schema with ER diagrams, relationships, and indexes
+- **[Testing Guide](TESTING_GUIDE.md)**: How to test the application locally
+- **[Setup Guide](SETUP.md)**: Installation and deployment instructions
 
 ## Features
 
