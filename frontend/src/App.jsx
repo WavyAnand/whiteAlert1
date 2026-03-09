@@ -6,6 +6,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Chat from './components/Chat'
 import Dashboard from './components/Dashboard'
+import TicketList from './components/TicketList'
 
 const theme = createTheme({
   palette: {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/tickets" element={<TicketList />} />
           <Route path="/" element={<Dashboard />} />
         </Routes>
       </Router>

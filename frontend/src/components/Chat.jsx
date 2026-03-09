@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
+import axios from 'axios'
 import {
   Container,
   Paper,
@@ -10,7 +11,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider
+  Divider,
+  Modal
 } from '@mui/material'
 
 const socket = io('http://localhost:5000')
@@ -19,6 +21,8 @@ function Chat() {
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
   const [roomId, setRoomId] = useState('general')
+  const [ticketModalOpen, setTicketModalOpen] = useState(false)
+  const [ticketInfo, setTicketInfo] = useState({ message: '', title: '', description: '' })
   const messagesEndRef = useRef(null)
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
@@ -56,6 +60,27 @@ function Chat() {
     }
   }
 
+  const handleCreateTicket = (msg) => {
+    setTicketInfo({ message: msg.message, title: msg.message.slice(0,50), description: msg.message })
+    setTicketModalOpen(true)
+  }
+
+  const submitTicket = async () => {
+    try {
+      await axios.post('/api/tickets', {
+        title: ticketInfo.title,
+        description: ticketInfo.description,
+        companyId: user.companyId,
+        createdBy: user.id
+      })
+      alert('Ticket created!')
+    } catch (err) {
+      console.error(err)
+      alert('Failed to create ticket')
+    }
+    setTicketModalOpen(false)
+  }
+
   return (
     <Container maxWidth="md">
       <Box sx={{ mt: 4 }}>
@@ -68,11 +93,19 @@ function Chat() {
           <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
             <List>
               {messages.map((msg, index) => (
-                <ListItem key={index}>
+                <ListItem key={index} sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                   <ListItemText
                     primary={msg.message}
                     secondary={`${msg.sender} - ${new Date(msg.timestamp || msg.created_at).toLocaleTimeString()}`}
                   />
+                  <Button
+                    size="small"
+                    variant="text"
+                    onClick={() => handleCreateTicket(msg)}
+                    sx={{ mt: 1 }}
+                  >
+                    Create Ticket
+                  </Button>
                 </ListItem>
               ))}
             </List>
@@ -80,6 +113,44 @@ function Chat() {
           </Box>
 
           <Divider />
+
+          {/* Ticket Creation Modal */}
+          <Modal open={ticketModalOpen} onClose={() => setTicketModalOpen(false)}>
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              width: 400
+            }}>
+              <Typography variant="h6" component="h2" gutterBottom>
+                Create Ticket
+              </Typography>
+              <TextField
+                label="Title"
+                fullWidth
+                value={ticketInfo.title}
+                onChange={(e) => setTicketInfo({ ...ticketInfo, title: e.target.value })}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Description"
+                fullWidth
+                multiline
+                rows={4}
+                value={ticketInfo.description}
+                onChange={(e) => setTicketInfo({ ...ticketInfo, description: e.target.value })}
+                sx={{ mb: 2 }}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button onClick={() => setTicketModalOpen(false)} sx={{ mr: 1 }}>Cancel</Button>
+                <Button variant="contained" onClick={submitTicket}>Submit</Button>
+              </Box>
+            </Box>
+          </Modal>
 
           {/* Input Area */}
           <Box component="form" onSubmit={sendMessage} sx={{ p: 2, display: 'flex' }}>

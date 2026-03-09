@@ -73,8 +73,8 @@ function Dashboard() {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   Manage support tickets and issues
                 </Typography>
-                <Button variant="contained" fullWidth disabled>
-                  Coming Soon
+                <Button variant="contained" fullWidth onClick={() => navigate('/tickets')}>
+                  View Tickets
                 </Button>
               </CardContent>
             </Card>

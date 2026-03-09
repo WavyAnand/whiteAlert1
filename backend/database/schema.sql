@@ -61,3 +61,29 @@ CREATE INDEX idx_chat_rooms_company_id ON chat_rooms(company_id);
 CREATE INDEX idx_messages_room_id ON messages(room_id);
 CREATE INDEX idx_messages_created_at ON messages(created_at);
 CREATE INDEX idx_room_participants_room_id ON room_participants(room_id);
+
+-- Phase 2: Ticketing and QA
+
+CREATE TABLE tickets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+  created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  status VARCHAR(50) DEFAULT 'open',
+  priority VARCHAR(50) DEFAULT 'normal',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ticket_comments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  ticket_id UUID REFERENCES tickets(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_tickets_company_id ON tickets(company_id);
+CREATE INDEX idx_tickets_status ON tickets(status);
+CREATE INDEX idx_ticket_comments_ticket_id ON ticket_comments(ticket_id);

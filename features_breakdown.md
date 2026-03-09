@@ -160,9 +160,10 @@ graph TD
 - Basic dashboards
 - Notification system
 
-#### Month 5-6: Advanced Features
-- QA validation workflows
-- GitLab integration
+#### Month 5-6: Advanced Features (Phase 2 Kickoff)
+- Ticket creation from chat (started)
+- QA validation workflows (planned)
+- GitLab integration (planned)
 - Enhanced analytics
 
 #### Month 7+: Ecosystem Expansion

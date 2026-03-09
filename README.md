@@ -11,7 +11,7 @@ This repository contains the architecture design and feature breakdown for a com
 
 - **Multi-Tenant Support**: Isolated data and configurations per company
 - **Real-Time Chat**: WebSocket-based messaging system
-- **Ticket Management**: Create tickets directly from chat conversations
+- **Ticket Management**: Create tickets directly from chat conversations (Phase 2 in progress)
 - **QA Validation Workflow**: Automated and manual quality assurance processes
 - **GitLab Integration**: Bidirectional synchronization with GitLab issues
 - **Role-Based Dashboards**: Customizable interfaces based on user permissions

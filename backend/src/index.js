@@ -52,6 +52,42 @@ app.post('/api/companies', async (req, res) => {
   }
 });
 
+// Ticketing routes (Phase 2)
+app.post('/api/tickets', async (req, res) => {
+  try {
+    const { title, description, companyId, createdBy } = req.body;
+    if (!title || !companyId) {
+      return res.status(400).json({ error: 'Title and companyId required' });
+    }
+    const result = await pool.query(
+      'INSERT INTO tickets (title, description, company_id, created_by, created_at) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+      [title, description, companyId, createdBy || null, new Date()]
+    );
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error creating ticket:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/tickets', async (req, res) => {
+  try {
+    const { companyId } = req.query;
+    const result = await pool.query('SELECT * FROM tickets WHERE company_id = $1', [companyId]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching tickets:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// QA workflow stub
+app.post('/api/qa/validate', (req, res) => {
+  const { ticketId } = req.body;
+  console.log('QA validation requested for', ticketId);
+  res.json({ status: 'queued', ticketId });
+});
+
 // User management routes (basic)
 app.post('/api/auth/register', async (req, res) => {
   try {
