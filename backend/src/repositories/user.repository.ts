@@ -11,6 +11,11 @@ export class UserRepository {
     return null;
   }
 
+  findByEmail(email: string) {
+    // placeholder to lookup by email
+    return null;
+  }
+
   create(data: any) {
     return data;
   }

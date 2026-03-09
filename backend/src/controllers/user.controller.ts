@@ -1,5 +1,8 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { UserService } from '../services/user.service';
+import { JwtAuthGuard } from '../middleware/jwt-auth.guard';
+import { RolesGuard } from '../middleware/roles.guard';
+import { Roles } from '../middleware/roles.decorator';
 
 @Controller('users')
 export class UserController {
